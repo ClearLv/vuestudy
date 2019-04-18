@@ -65,6 +65,16 @@
                 <template slot-scope="scope">
                     {{scope.row.pJianjie}}
                 </template>
+                <!--<el-popover-->
+                        <!--ref="popover1"-->
+                        <!--placement="top-start"-->
+                        <!--title="简介"-->
+                        <!--width="200"-->
+                        <!--trigger="hover">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--{{scope.row.pJianjie}}-->
+                    <!--</template>-->
+                <!--</el-popover>-->
 
             </el-table-column>
 
