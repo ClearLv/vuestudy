@@ -5,14 +5,17 @@
                 ref="multipleTable"
                 :data="tableData"
                 style="width: 100%"
+
                 @selection-change="handleSelectionChange">
                 <!--v-model="tableData">-->
             <el-table-column
                     label="全选"
                     type="selection"
+
                     width="55">
                 <template scope="scope">
-                    <el-checkbox v-model="scope.row.checked"></el-checkbox>
+                    <el-checkbox v-model="scope.row.checked" ></el-checkbox>
+                    <!--<el-checkbox v-model="tableData.checked"></el-checkbox>-->
                 </template>
             </el-table-column>
             <el-table-column
@@ -63,7 +66,8 @@
                     total:1
                 }],
                 count:0,
-                multipleSelection: []
+                multipleSelection: [],
+                isTrue: false,
             }
         },
         computed:{
@@ -79,21 +83,35 @@
             }
         },
         methods:{
+
             handleSelectionChange(val) {
-                console.log(val)
-               // console.log(val.checked)
+                //console.log(val)
+
                 for (let x of val){
-                    //console.log(x)
-                   // x.checked = true;
-                    x.checked = !this.tableData.checked;
+                    console.log(val)
+                     let zhenshi = !this.tableData.checked;
+                     x.checked = zhenshi;
+                    //this.tableData.checked = !val.checked;
+
                 }
-              // row.checked = true;
-                //console.log(this.tableData.checked)
                 this.multipleSelection = val;
-               // scope.row.checked =
             },
             handleChange(value) {
                 // console.log(value);
+            }
+        },
+        watch:{
+            isTrue: function () {
+                if (this.isTrue == true) {
+                    for (let k = 0; k < this.tableData.length; k++) {
+                        this.tableData[k].checked = true;
+                    }
+                } else {
+                    for (let k = 0; k < this.tableData.length; k++) {
+                        this.tableData[k].checked = false;
+                    }
+                }
+
             }
         }
     }

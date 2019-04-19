@@ -35,6 +35,11 @@ export default new Router({
             name:'ceshi',
             component: () => import(/* webpackChunkName: "about" */ './views/Ceshi.vue')
         },
+        {
+            path:'/pubuliu',
+            name:'pubuliu',
+            component: () => import(/* webpackChunkName: "about" */ './views/PuBuLiu.vue')
+        }
         // {
         //     path: '/buyCar',
         //     name: 'buyCar',

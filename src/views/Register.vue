@@ -270,7 +270,7 @@
             onSubmit() {
                 // console.log( this.$refs[formName]);
                 //console.log( this.$refs.tijiaoform.validate(valid));
-                //this.$refs[formName].validate(valid => {
+                // this.$refs[formName].validate(valid => {
                 // console.log(valid);
                 //    if (valid) {
                 let form = {
@@ -294,7 +294,7 @@
                         });
                     }
                 })
-                //  }
+                //   }
                 // })
             },
             addEducation(index) {
@@ -305,7 +305,7 @@
                 };
                 this.form.educations.splice(index, 0, neirong);
                 if (this.clickTime == 3) {
-                    console.log(this.clickTime)
+                    //console.log(this.clickTime)
                     this.disabled = true
                 }
 
@@ -313,7 +313,10 @@
             },
             remove(index) {
                 this.form.educations.splice(index, 1);
+               // console.log(this.clickTime)
                 this.clickTime--;
+                this.disabled = false
+                //console.log(this.clickTime)
             }
         }
     }

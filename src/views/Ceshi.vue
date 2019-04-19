@@ -1,90 +1,187 @@
 <template>
     <div class="ceshi">
-        <el-table
-                ref="multipleTable"
-                :data="tableData3"
-                tooltip-effect="dark"
-                style="width: 100%"
-                @selection-change="handleSelectionChange">
-            <el-table-column
-                    type="selection"
-                    width="55">
+        <el-table :data="list" border style="width: 100%;" v-show="list.length" highlight-current-row>
+            <el-table-column label="复选框" width="100" style="color:red" :render-header="renderHeader">
+                <template scope="scope">
+                    <el-checkbox v-model="scope.row.checked"></el-checkbox>
+                </template>
             </el-table-column>
-            <el-table-column
-                    label="日期"
-                    width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+            <el-table-column prop="name" label="商品名称" width="180">
             </el-table-column>
-            <el-table-column
-                    prop="name"
-                    label="姓名"
-                    width="120">
+            <el-table-column prop="price" label="商品价钱" width="180">
             </el-table-column>
-            <el-table-column
-                    prop="address"
-                    label="地址"
-                    show-overflow-tooltip>
+            <el-table-column label="商品数量" width="380">
+                <template scope="scope">
+                    <el-input-number v-model="scope.row.num" controls-position="right" :min="1" :max="scope.row.number"></el-input-number>
+                </template>
+
+            </el-table-column>
+            <el-table-column label="商品总价">
+                <template scope="scope">
+                    <div>{{scope.row.price*scope.row.num}}</div>
+
+                </template>
+            </el-table-column>
+            <el-table-column label="删除功能">
+                <template scope="scope">
+                    <el-popover placement="top" width="160" v-model="scope.row.remove">
+                        <p>亲！确定删除此商品吗？</p>
+                        <div style="text-align: right; margin: 0">
+                            <el-button size="mini" type="text" @click="scope.row.remove=false">取消</el-button>
+                            <el-button type="primary" size="mini" @click="removeId(scope.row)">确定</el-button>
+                        </div>
+                        <el-button slot="reference">删除</el-button>
+                    </el-popover>
+
+                </template>
+
             </el-table-column>
         </el-table>
-        <div style="margin-top: 20px">
-            <el-button @click="toggleSelection([tableData3[1], tableData3[2]])">切换第二、第三行的选中状态</el-button>
-            <el-button @click="toggleSelection()">取消选择</el-button>
-        </div>
+        <!--<div style="margin-top: 20px">-->
+            <!--<el-button @click="toggleSelection([tableData3[1], tableData3[2]])">切换第二、第三行的选中状态</el-button>-->
+            <!--<el-button @click="toggleSelection()">取消选择</el-button>-->
+        <!--</div>-->
     </div>
 </template>
 
 <script>
-    export default {
+    export default  {
         data() {
+            var checkAge = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('不能为空或者0'));
+                }
+                setTimeout(() => {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('请输入数字值'));
+                    } else {
+                        if (value < 0) {
+                            callback(new Error('不能小于0'));
+                        } else {
+                            callback();
+                        }
+                    }
+                }, 1000);
+            };
             return {
-                tableData3: [{
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-08',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-06',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-07',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
-                multipleSelection: []
+                list: [{
+                    id: 1,
+                    name: "打火机",
+                    price: 3,
+                    number: 4,
+                    checked: false,
+                    num: 1,
+                    remove: false
+                },
+                    {
+                        id: 2,
+                        name: "冰淇淋",
+                        price: 10,
+                        number: 3,
+                        checked: false,
+                        num: 1,
+                        remove: false
+                    },
+                    {
+                        id: 3,
+                        name: "冰淇淋",
+                        price: 7,
+                        number: 5,
+                        checked: false,
+                        num: 1,
+                        remove: false
+                    }
+                ],
+                count: 0,
+                istrue: false,
+                ruleForm2: {
+                    name: '',
+                    price: '',
+                    age: ''
+                },
+                rules2: {
+                    age: [
+                        { validator: checkAge, trigger: 'blur' }
+                    ],
+                    price: [
+                        { validator: checkAge, trigger: 'blur' }
+                    ]
+                }
+
             }
         },
+        computed: {
+            countList: function () {
+                var a = 0;
+                for (let i = 0; i < this.list.length; i++) {
+                    if (this.list[i].checked == true) {
 
-        methods: {
-            toggleSelection(rows) {
-                if (rows) {
-                    rows.forEach(row => {
-                        this.$refs.multipleTable.toggleRowSelection(row);
-                    });
+                        a += this.list[i].price * this.list[i].num
+                    }
+                }
+                this.count = a;
+                return this.count
+            }
+        },
+        watch: {
+            istrue: function () {
+                if (this.istrue == true) {
+                    for (let k = 0; k < this.list.length; k++) {
+                        this.list[k].checked = true;
+                    }
                 } else {
-                    this.$refs.multipleTable.clearSelection();
+                    for (let k = 0; k < this.list.length; k++) {
+                        this.list[k].checked = false;
+                    }
+                }
+
+            }
+        },
+        methods: {
+            removeId(value) {
+                var ids = value.id
+                for (var i = 0; i < this.list.length; i++) {
+                    if (ids == this.list[i].id) {
+                        this.list.splice(i, 1)
+                    }
                 }
             },
-            handleSelectionChange(val) {
-                console.log(val)
-                this.multipleSelection = val;
+            renderHeader: function (h, params) {//实现table表头添加
+                var self = this;
+                return h('div', [
+                    h('el-checkbox', {
+                        on: {
+                            change: (i) => {
+                                self.istrue = i;
+                            }
+                        }
+                    }, '全选')
+                ]);
+
+            },
+            submitForm(formName) {//实现点击添加
+                let self=this;
+                let counts=40;
+                counts++;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        self.list.push({id:counts,name:self.ruleForm2.name,price:self.ruleForm2.price,number:self.ruleForm2.age,checked:false,num:1,remove:false});
+                        self.$refs[formName].resetFields();//数据清空方法
+                        self.$message({
+                            message: '恭喜你，商品已经成功添加',
+                            type: 'success'
+                        });
+                    } else {
+                        alert('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();//数据清空方法
             }
         }
+
     }
 </script>
 
