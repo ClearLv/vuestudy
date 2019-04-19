@@ -63,18 +63,17 @@
                     prop="pJianjie"
                     label="简介">
                 <template slot-scope="scope">
-                    {{scope.row.pJianjie}}
+                    <!--{{scope.row.pJianjie}}-->
+                    <el-popover trigger="hover" placement="top">
+                        <p>简介: {{ scope.row.pJianjie}}</p>
+                        <!--<p>住址: {{ scope.row.address }}</p>-->
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag size="medium">{{ scope.row.pJianjie }}</el-tag>
+                        </div>
+                        <el-button type="text" @click="productShow(scope.$index, scope.row)" style="font-size: 12px">详情</el-button>
+
+                    </el-popover>
                 </template>
-                <!--<el-popover-->
-                        <!--ref="popover1"-->
-                        <!--placement="top-start"-->
-                        <!--title="简介"-->
-                        <!--width="200"-->
-                        <!--trigger="hover">-->
-                    <!--<template slot-scope="scope">-->
-                        <!--{{scope.row.pJianjie}}-->
-                    <!--</template>-->
-                <!--</el-popover>-->
 
             </el-table-column>
 
